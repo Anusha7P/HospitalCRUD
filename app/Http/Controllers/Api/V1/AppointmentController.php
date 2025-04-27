@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentRequest;
-use App\Http\Requests\DoctorsAvailability;
 use App\Http\Requests\DoctorsAvailabilityRequest;
 use App\Models\Api\V1\Appointment;
+use App\Models\Api\V1\Schedule;
+use App\Models\Api\V1\Leave;
 use App\Mail\AppointmentConfirmationMail;
+use App\Jobs\SendAppointmentConfirmation;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
-use App\Jobs\SendAppointmentConfirmation;
+use Carbon\Carbon;
 
 /**
  * @OA\Info(
@@ -45,6 +47,13 @@ class AppointmentController extends Controller
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
+     *         name="hospital_id",
+     *         in="query",
+     *         description="Filter by hospital ID",
+     *         required=false,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
      *         name="status",
      *         in="query",
      *         description="Filter by appointment status",
@@ -70,7 +79,7 @@ class AppointmentController extends Controller
         }
 
         if ($request->has('hospital_id')) {
-            $query->where('', $request->hospital_id);
+            $query->where('hospital_id', $request->hospital_id);  // Fixed the query
         }
 
         if ($request->has('status')) {
@@ -88,16 +97,16 @@ class AppointmentController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     * required={"patient_id", "doctor_id", "status", "date", "time"},
-     * @OA\Property(property="patient_id", type="integer"),
-     *                     @OA\Property(property="doctor_id", type="integer"),
-     *                     @OA\Property(property="status", type="string", enum={"pending", "confirmed", "cancelled"}),
-     *                     @OA\Property(property="date", type="string", format="date", example="2025-04-25"),
-     *                     @OA\Property(property="time", type="string", format="time", example="14:30"),
-     *                     @OA\Property(property="notes", type="string", nullable=true),
-     *                     @OA\Property(property="hospital_id", type="integer")
-     *)
-     *            ),   
+     *             required={"patient_id", "doctor_id", "status", "date", "time", "hospital_id"},  // Added hospital_id to required
+     *             @OA\Property(property="patient_id", type="integer"),
+     *             @OA\Property(property="doctor_id", type="integer"),
+     *             @OA\Property(property="status", type="string", enum={"pending", "confirmed", "cancelled"}),
+     *             @OA\Property(property="date", type="string", format="date", example="2025-04-25"),
+     *             @OA\Property(property="time", type="string", format="time", example="14:30"),
+     *             @OA\Property(property="notes", type="string", nullable=true),
+     *             @OA\Property(property="hospital_id", type="integer")
+     *         )
+     *     ),
      *     @OA\Response(response=201, description="Appointment created")
      * )
      */
@@ -110,15 +119,66 @@ class AppointmentController extends Controller
         if ($appointment->patient && $appointment->patient->email) {
             // Mail::to($appointment->patient->email)->send(new AppointmentConfirmationMail($appointment));
             SendAppointmentConfirmation::dispatch($appointment);
-
         }
 
         return response()->json($appointment, 201);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/appointments/availability",
+     *     summary="Check doctor availability",
+     *     tags={"Appointments"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"doctor_id", "appointment_date", "duration"},
+     *             @OA\Property(property="doctor_id", type="integer"),
+     *             @OA\Property(property="appointment_date", type="string", format="date"),
+     *             @OA\Property(property="duration", type="integer", example="30")
+     *         )
+     *     ),
+     *     @OA\Response(response=200, description="Available slots for the doctor")
+     * )
+     */
     public function availability(DoctorsAvailabilityRequest $request)
     {
-        $available = 
+        $doctorId = $request->input('doctor_id');
+        $appointmentDate = $request->input('appointment_date');
+        $appointmentDuration = $request->input('duration');
+
+        // Check if doctor has a schedule on the requested date
+        $schedule = Schedule::where('doctor_id', $doctorId)
+            ->where('day', Carbon::parse($appointmentDate)->format('l'))
+            ->first();
+
+        if (!$schedule) {
+            return response()->json(['error' => 'Doctor is not available on this day'], 400);
+        }
+
+        // Check if doctor is on leave on the requested date
+        $isOnLeave = Leave::where('doctor_id', $doctorId)
+            ->whereDate('leave_date', $appointmentDate)
+            ->exists();
+
+        if ($isOnLeave) {
+            return response()->json(['error' => 'Doctor is on leave on this date'], 400);
+        }
+
+        // Calculate available slots based on doctor's schedule and appointment duration
+        $startTime = Carbon::parse($schedule->start_time);
+        $endTime = Carbon::parse($schedule->end_time);
+
+        $availableSlots = [];
+        while ($startTime->addMinutes($appointmentDuration)->lessThanOrEqualTo($endTime)) {
+            $availableSlots[] = $startTime->format('H:i');
+        }
+
+        if (count($availableSlots) > 0) {
+            return response()->json(['available_slots' => $availableSlots]);
+        } else {
+            return response()->json(['error' => 'No available slots for this doctor on this date'], 400);
+        }
     }
 
     /**
@@ -159,10 +219,9 @@ class AppointmentController extends Controller
      *             @OA\Property(property="doctor_id", type="integer"),
      *             @OA\Property(property="status", type="string", enum={"pending", "confirmed", "cancelled"}),
      *             @OA\Property(property="date", type="string", format="date"),
-     *             @OA\Property(property="time", type="integer", format="time"),
+     *             @OA\Property(property="time", type="string", format="time"),  // Changed to string
      *             @OA\Property(property="notes", type="string", nullable=true),
-     *             @OA\Property(property="hospital_id", type="integer"),
-     * 
+     *             @OA\Property(property="hospital_id", type="integer")
      *         )
      *     ),
      *     @OA\Response(response=200, description="Updated appointment")
