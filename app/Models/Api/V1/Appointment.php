@@ -12,6 +12,7 @@ class Appointment extends Model
         'status',
         'date',
         'time',
+        'slot',
         'notes',
         'hospital_id'
     ];

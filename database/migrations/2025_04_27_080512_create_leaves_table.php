@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('leaves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('patient_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->time('time')->nullable()->change();
-            $table->string('status')->default('Pending'); 
-            $table->text('notes')->nullable();
-            $table->integer('slot')->default(30);  
+            $table->date('leave_date')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appointments');
+        Schema::dropIfExists('leaves');
     }
 };

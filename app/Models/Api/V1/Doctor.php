@@ -15,5 +15,20 @@ class Doctor extends Model
 
     ];
 
+    public function scheudle()
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function leave(){
+        return $this->hasMany(Leave::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    
 
 }

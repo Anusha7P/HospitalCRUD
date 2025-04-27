@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentRequest;
+use App\Http\Requests\DoctorsAvailability;
+use App\Http\Requests\DoctorsAvailabilityRequest;
 use App\Models\Api\V1\Appointment;
 use App\Mail\AppointmentConfirmationMail;
 use Illuminate\Support\Facades\Mail;
@@ -112,6 +114,11 @@ class AppointmentController extends Controller
         }
 
         return response()->json($appointment, 201);
+    }
+
+    public function availability(DoctorsAvailabilityRequest $request)
+    {
+        $available = 
     }
 
     /**
