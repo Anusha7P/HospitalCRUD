@@ -1,0 +1,768 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Hospital Management API",
+        "description": "API documentation for Hospital, Doctor, Patient, and Appointment management system",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/appointments": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "List all appointments with optional filters",
+                "operationId": "b827cd052bc10ca91a7753a2c98c95c8",
+                "parameters": [
+                    {
+                        "name": "doctor_id",
+                        "in": "query",
+                        "description": "Filter by doctor ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "patient_id",
+                        "in": "query",
+                        "description": "Filter by patient ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter by appointment status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "confirmed",
+                                "cancelled"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of appointments"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment",
+                "operationId": "48a846f3ad34419db2fd16184dfbb330",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "patient_id",
+                                    "doctor_id",
+                                    "status",
+                                    "date",
+                                    "time"
+                                ],
+                                "properties": {
+                                    "patient_id": {
+                                        "type": "integer"
+                                    },
+                                    "doctor_id": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "confirmed",
+                                            "cancelled"
+                                        ]
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-25"
+                                    },
+                                    "time": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:30"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Appointment created"
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{id}": {
+            "get": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Get a specific appointment by ID",
+                "operationId": "19c3861848d29c8e408e94bb84dea1f7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Appointment details"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Update an existing appointment",
+                "operationId": "0eed29492f9cb57edc5953fc9da63637",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "patient_id": {
+                                        "type": "integer"
+                                    },
+                                    "doctor_id": {
+                                        "type": "integer"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "confirmed",
+                                            "cancelled"
+                                        ]
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "time": {
+                                        "type": "integer",
+                                        "format": "time"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated appointment"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Delete an appointment",
+                "operationId": "5043f7d38fe8e91347d7fbfaf1bfd532",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Appointment deleted"
+                    }
+                }
+            }
+        },
+        "/api/v1/doctors": {
+            "get": {
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Get all doctors",
+                "operationId": "1ff2acc28425ccb6474cd7925c28ddd9",
+                "responses": {
+                    "200": {
+                        "description": "List of doctors"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Create a new doctor",
+                "operationId": "0cfe89b6136ea425fda895fce9de82d5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "specialization",
+                                    "hospital_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "integer"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "Hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Doctor created successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/doctors/{id}": {
+            "get": {
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Get a doctor by ID",
+                "operationId": "873497a3e03b558bb6520c95313e6199",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "doctor data retrieved"
+                    },
+                    "404": {
+                        "description": "doctor not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Update a doctor",
+                "operationId": "9d4a925ffd4e3b1007aaee415428f036",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "integer"
+                                    },
+                                    "specialization": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "Hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "doctor updated successfully"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "doctor"
+                ],
+                "summary": "Delete a doctor",
+                "operationId": "d332a8941af19f68f3e7f32ee271e29e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the doctor to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "doctor deleted successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/hospitals": {
+            "get": {
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Get all Hospitals Details",
+                "operationId": "041c32c866f6521a62e8d306a4980751",
+                "responses": {
+                    "200": {
+                        "description": "List of Hospitals"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Create a new Hospital",
+                "operationId": "2e53ae79f3d5f8006da137bc174c751d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "address",
+                                    "contact",
+                                    "type",
+                                    "services"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "contact": {
+                                        "type": "integer"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "services": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hospital created successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/hospitals/{id}": {
+            "get": {
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Get a Hospital by ID",
+                "operationId": "978f234bf487cdc9c878ce520ce5917c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Hospital",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hospital data retrieved"
+                    },
+                    "404": {
+                        "description": "Hospital not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Update a Hospital",
+                "operationId": "471d2ffdb43decb5c8e3fd5e283cdb85",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Hospital to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "contact": {
+                                        "type": "integer"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "services": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hospital updated successfully"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hospital"
+                ],
+                "summary": "Delete a Hospital",
+                "operationId": "1813cf095b22d4aaab318814a11f973a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Hospital to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Hospital deleted successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/patients": {
+            "get": {
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Get all patients",
+                "operationId": "6747f925788f494507252b8889e09dd1",
+                "responses": {
+                    "200": {
+                        "description": "List of patient"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Create a new patient",
+                "operationId": "9296610ded1a685f9284d36de20ab313",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "address",
+                                    "DOB",
+                                    "gender",
+                                    "hospital_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "DOB": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Patient created successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/patients/{id}": {
+            "get": {
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Get a Patient by ID",
+                "operationId": "054f2ccead52a541c84d2434da85858d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Patient",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Patient data retrieved"
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Update a patient",
+                "operationId": "3b8d0a85cd7984d11ab97dea48582496",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the patient to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "address",
+                                    "DOB",
+                                    "gender",
+                                    "hospital_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "DOB": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "format": "enum"
+                                    },
+                                    "hospital_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Patient updated successfully"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "patient"
+                ],
+                "summary": "Delete a Patient",
+                "operationId": "593eda9a73fd98782af771e44d1adef6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Patient to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Patient deleted successfully"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Appointments",
+            "description": "Appointments"
+        },
+        {
+            "name": "doctor",
+            "description": "doctor"
+        },
+        {
+            "name": "Hospital",
+            "description": "Hospital"
+        },
+        {
+            "name": "patient",
+            "description": "patient"
+        }
+    ]
+}
