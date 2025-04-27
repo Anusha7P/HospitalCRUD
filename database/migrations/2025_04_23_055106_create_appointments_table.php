@@ -19,7 +19,6 @@ return new class extends Migration
             $table->time('time')->nullable()->change();
             $table->string('status')->default('Pending'); 
             $table->text('notes')->nullable();
-            $table->integer('slot')->default(30);  
             $table->timestamps();
         });
     }
