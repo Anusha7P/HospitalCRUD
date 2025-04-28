@@ -12,7 +12,9 @@ return new class extends Migration {
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained()->cascadeOnDelete(); //Calling doctor id to keep the schedule since it is one to many relation here.
+            $table->foreignId('doctor_id')->constrained()->cascadeOnDelete(); 
+            //Calling doctor id to keep the schedule since it is one to many relation here.
+            $table->foreignId('hospital_id')->constrained()->cascadeOnDelete();
             $table->string('day');
             $table->time('start_time');
             $table->time('end_time');

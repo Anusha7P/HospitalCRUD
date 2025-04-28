@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('doctors_id')->constrained()->onDelete('Cascade');
+            $table->foreignId('hospitals_id')->constrained()->onDelete('Cascade');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');

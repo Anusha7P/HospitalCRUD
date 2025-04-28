@@ -13,7 +13,7 @@ class LeaveController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Leave::all());
     }
 
     /**
@@ -23,6 +23,7 @@ class LeaveController extends Controller
     {
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
+            'hospital_id' => 'required|exists:hospitals,id',
             'leave_date' => 'required|date',
         ]);
 
@@ -37,7 +38,8 @@ class LeaveController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $leave = Leave::findOrFail($id);
+        return response()->json($leave,200);
     }
 
     /**
@@ -53,6 +55,7 @@ class LeaveController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Leave::destroy($id);
+        return response()->json(['message' => 'Leave removed!'],200);
     }
 }

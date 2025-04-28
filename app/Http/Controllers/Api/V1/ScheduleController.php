@@ -13,7 +13,7 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Schedule::all());
     }
 
     /**
@@ -23,6 +23,7 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
+            'hospital_id' => 'required|exists:hospitals,id',
             'day' => 'required|string',
             'start_time' => 'required',
             'end_time' => 'required',
@@ -39,7 +40,8 @@ class ScheduleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $schedule = Schedule::findOrFail($id);
+        return response()->json($schedule,200);
     }
 
     /**
@@ -55,6 +57,7 @@ class ScheduleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Schedule::destroy($id);
+        return response()->json(['messgae'=>'Doctors schedule removed successfully'], 200);
     }
 }

@@ -12,6 +12,7 @@ class Slot extends Model
 
     protected $fillable = [
         'doctor_id',
+        'hospital_id',
         'date',
         'start_time',
         'end_time',
