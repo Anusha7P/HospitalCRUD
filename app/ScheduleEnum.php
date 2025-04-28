@@ -2,7 +2,7 @@
 
 namespace App;
 
-enum ScheduleEnum
+enum ScheduleEnum : string
 {
     case Sunday = "Sunday";
     case Monday = "Monday";
