@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Doctor;
-use App\Models\Slot;
+use App\Models\Api\V1\Doctor;
+use App\Models\Api\V1\Slot;
 use Carbon\Carbon;
 
 class GenerateDoctorSlots extends Command

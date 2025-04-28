@@ -23,6 +23,7 @@ Route::prefix('v1')->group(function () {
     Route::post('schedules', [ScheduleController::class, 'store']);
     Route::post('leaves', [LeaveController::class, 'store']);
     Route::post('appointments/check-availability', [AppointmentController::class, 'availability']);
+    Route::apiResource('slots', SlotController::class);
 });
 
 Route::get('/check', function () {
