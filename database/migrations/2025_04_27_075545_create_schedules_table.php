@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->foreignId('doctor_id')->constrained()->cascadeOnDelete(); 
             //Calling doctor id to keep the schedule since it is one to many relation here.
             $table->foreignId('hospital_id')->constrained()->cascadeOnDelete();
-            $table->string('day');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();

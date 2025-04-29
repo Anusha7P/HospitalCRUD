@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Api\V2\SlotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\DoctorController;
@@ -24,6 +25,10 @@ Route::prefix('v1')->group(function () {
     Route::post('leaves', [LeaveController::class, 'store']);
     Route::post('appointments/check-availability', [AppointmentController::class, 'availability']);
     Route::apiResource('slots', SlotController::class);
+});
+
+Route::prefix('v2')->group(function () {
+    Route::apiResource('generate-slot', SlotController::class);
 });
 
 Route::get('/check', function () {

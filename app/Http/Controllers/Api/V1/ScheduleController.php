@@ -24,15 +24,16 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
             'hospital_id' => 'required|exists:hospitals,id',
-            'day' => 'required|string',
-            'start_time' => 'required',
-            'end_time' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
 
         $schedule = Schedule::create($validated);
 
         return response()->json($schedule, 201);
-    
+
     }
 
     /**
@@ -41,7 +42,7 @@ class ScheduleController extends Controller
     public function show(string $id)
     {
         $schedule = Schedule::findOrFail($id);
-        return response()->json($schedule,200);
+        return response()->json($schedule, 200);
     }
 
     /**
@@ -58,6 +59,6 @@ class ScheduleController extends Controller
     public function destroy(string $id)
     {
         Schedule::destroy($id);
-        return response()->json(['messgae'=>'Doctors schedule removed successfully'], 200);
+        return response()->json(['messgae' => 'Doctors schedule removed successfully'], 200);
     }
 }
