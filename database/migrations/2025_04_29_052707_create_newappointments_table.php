@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('newappointments', function (Blueprint $table) {
             $table->id();
-            $table->foreign('hospital_name')->references('name')->on('hospitals')->onDelete('Cascade');
-            $table->foreign('doctor_id')->references('id')->on('doctors')->onDelete('Cascade');
+            $table->unsignedBigInteger('hospital_id');
+            $table->foreign('hospital_id')->references('id')->on('hospitals')->onDelete('Cascade');
+            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
             $table->foreignId('patient_id')->constrained()->cascadeOnDelete()->nullable();
             $table->foreignId('slots_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default('pending');
