@@ -13,16 +13,12 @@ return new class extends Migration
     {
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctors_id')->constrained()->onDelete('Cascade');
-            $table->foreignId('hospitals_id')->constrained()->onDelete('Cascade');
+            $table->foreignId('schedule_id')->constrained()->cascadeOnDelete();
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
-            $table->integer('patient_id')->nullable();
-            $table->enum('status', ['available', 'booked'])->default('available');
+            $table->boolean('is_booked')->default(false);
             $table->timestamps();
-
-            // $table->foreign('patient_id')->references('id')->on('patients')->onDelete('set null');
         });
     }
 
@@ -34,4 +30,3 @@ return new class extends Migration
         Schema::dropIfExists('slots');
     }
 };
-
