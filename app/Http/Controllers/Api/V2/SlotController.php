@@ -22,24 +22,22 @@ class SlotController extends Controller
 
         DB::transaction(function () use ($schedule, $startDate, $endDate, &$slots) {
             for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
-                // Only generate if the date matches the schedule's "day"
-                if ($date->format('l') === $schedule->day) {
-                    $startTime = Carbon::parse($schedule->start_time);
-                    $endTime = Carbon::parse($schedule->end_time);
-                    while ($startTime->lt($endTime)) {
-                        $slotEnd = $startTime->copy()->addMinutes(15);
-                        if ($slotEnd->gt($endTime))
-                            break;
+                // Generate slots for all dates between start_date and end_date
+                $startTime = Carbon::parse($schedule->start_time);
+                $endTime = Carbon::parse($schedule->end_time);
+                while ($startTime->lt($endTime)) {
+                    $slotEnd = $startTime->copy()->addMinutes(15);
+                    if ($slotEnd->gt($endTime))
+                        break;
 
-                        $slots[] = Slot::create([
-                            'schedule_id' => $schedule->id,
-                            'date' => $date->format('Y-m-d'),
-                            'start_time' => $startTime->format('H:i:s'),
-                            'end_time' => $slotEnd->format('H:i:s'),
-                        ]);
+                    $slots[] = Slot::create([
+                        'schedule_id' => $schedule->id,
+                        'date' => $date->format('Y-m-d'),
+                        'start_time' => $startTime->format('H:i:s'),
+                        'end_time' => $slotEnd->format('H:i:s'),
+                    ]);
 
-                        $startTime = $slotEnd;
-                    }
+                    $startTime = $slotEnd;
                 }
             }
         });
@@ -49,6 +47,7 @@ class SlotController extends Controller
             'slots_created' => count($slots),
         ], 201);
     }
+
 
     public function available($doctorId)
     {

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('hospital_id')->references('id')->on('hospitals')->onDelete('Cascade');
             $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
             $table->foreignId('patient_id')->constrained()->cascadeOnDelete()->nullable();
-            $table->foreignId('slots_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('slot_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default('pending');
             $table->dateTime('date_time')->nullable();
             $table->string('notes')->nullable();

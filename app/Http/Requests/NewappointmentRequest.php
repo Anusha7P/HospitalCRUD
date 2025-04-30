@@ -22,12 +22,12 @@ class NewappointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hospital_name' => 'required|exists:hospitals,name',
+            'hospital_id' => 'required|exists:hospitals,id',
             'doctor_id' => 'required|exists:doctors,id',
             'patient_id' => 'nullable|exists:patients,id',
-            'slots_id'=>'required|exists:slots,id',
+            'slot_id'=>'required|exists:slots,id',
             'status' => 'required|in:pending,confirmed,cancelled',
-            'date_time'=> 'nullable|date_format:Y:m:d:H:i',
+            'date_time' => 'nullable|date_format:Y-m-d H:i',
             'notes' => 'nullable|string',
            
         ];

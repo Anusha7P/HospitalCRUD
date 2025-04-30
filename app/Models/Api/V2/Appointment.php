@@ -11,11 +11,12 @@ use App\Models\Api\V1\Hospital;
 
 class Appointment extends Model
 {
+    protected $table = 'newappointments';
     protected $fillable = [
-        'hospital_name',
+        'hospital_id',
         'doctor_id',
         'patient_id',
-        'slots_id',
+        'slot_id',
         'status',
         'date_time',
         'notes'

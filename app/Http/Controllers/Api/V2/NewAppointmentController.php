@@ -9,7 +9,7 @@ use App\Models\Api\V2\Slot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class AppointmentController extends Controller
+class NewAppointmentController extends Controller
 {
     /**
      * Display a listing of appointments, with optional filters.
