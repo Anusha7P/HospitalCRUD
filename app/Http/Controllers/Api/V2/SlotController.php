@@ -21,10 +21,15 @@ class SlotController extends Controller
         $slots = [];
 
         DB::transaction(function () use ($schedule, $startDate, $endDate, &$slots) {
-            for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
+            for (
+                $date = $startDate->copy();
+                $date->lte($endDate);
+                $date->addDay()
+            ) {
                 // Generate slots for all dates between start_date and end_date
                 $startTime = Carbon::parse($schedule->start_time);
                 $endTime = Carbon::parse($schedule->end_time);
+                //making slots from the everyday working hour
                 while ($startTime->lt($endTime)) {
                     $slotEnd = $startTime->copy()->addMinutes(15);
                     if ($slotEnd->gt($endTime))
@@ -48,14 +53,32 @@ class SlotController extends Controller
         ], 201);
     }
 
-
     public function available($doctorId)
     {
-        $slots = Slot::whereHas('schedule', function ($q) use ($doctorId) {
+        $query = Slot::whereHas('schedule', function ($q) use ($doctorId) {
             $q->where('doctor_id', $doctorId);
-        })->where('is_booked', false)->get();
+        })->where('is_booked', false);
+
+        // Optional date filters
+        if (request()->has('date')) {
+            $query->where('date', request()->date);
+        } elseif (request()->has('start_date') && request()->has('end_date')) {
+            $query->whereBetween('date', [request()->start_date, request()->end_date]);
+        }
+
+        $slots = $query->get();
 
         return response()->json($slots);
     }
+
+//this just showed the available slot of all schedule entered. 
+    // public function available($doctorId)
+    // {
+    //     $slots = Slot::whereHas('schedule', function ($q) use ($doctorId) {
+    //         $q->where('doctor_id', $doctorId);
+    //     })->where('is_booked', false)->get();
+
+    //     return response()->json($slots);
+    // }
 }
 

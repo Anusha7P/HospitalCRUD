@@ -33,6 +33,7 @@ Route::prefix('v1')->group(function () {
 Route::prefix('v2')->group(function () {
     Route::apiResource('generate-slot', SlotController::class);
     Route::post('slots-generate', [SlotController::class, 'generate']);
+    Route::get('available/{doctorId}', [SlotController::class, 'available']);
     Route::apiResource('new-appointment', NewAppointmentController::class);
 });
 
