@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Models\Api\V1\Leave;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class LeaveController extends Controller
 {

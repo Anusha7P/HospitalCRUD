@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Api\V2\NewAppointmentController;
-use App\Http\Controllers\Api\V2\SlotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\DoctorController;
+use App\Http\Controllers\Api\V2\SlotController;
 use App\Http\Controllers\Api\V1\LeaveController;
-use App\Http\Controllers\Api\V1\ScheduleController;
+use App\Http\Controllers\Api\V1\DoctorController;
 use App\Http\Controllers\Api\V1\PatientController;
+use App\Http\Controllers\Api\V1\ScheduleController;
 use App\Http\Controllers\Api\V1\HospitalController;
 use App\Http\Controllers\Api\V1\AppointmentController;
+use App\Http\Controllers\Api\V2\NewAppointmentController;
 
 
 

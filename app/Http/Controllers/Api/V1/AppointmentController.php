@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Models\Api\V1\Leave;
+use App\Models\Api\V1\Schedule;
+use App\Models\Api\V1\Appointment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AppointmentRequest;
-use App\Http\Requests\DoctorsAvailabilityRequest;
-use App\Models\Api\V1\Appointment;
-use App\Models\Api\V1\Schedule;
-use App\Models\Api\V1\Leave;
 use App\Mail\AppointmentConfirmationMail;
 use App\Jobs\SendAppointmentConfirmation;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\Http\Requests\DoctorsAvailabilityRequest;
+
+
 
 /**
  * @OA\Info(
@@ -27,7 +28,7 @@ use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
-    /**
+    /**cc
      * @OA\Get(
      *     path="/api/v1/appointments",
      *     summary="List all appointments with optional filters",

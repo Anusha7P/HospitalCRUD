@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Models\Api\V1\Patient;
+use OpenApi\Annotations as OA;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PatientRequest;
-use App\Models\Api\V1\Patient;
-use Illuminate\Http\Request;
-use OpenApi\Annotations as OA;
+
 
 
 class PatientController extends Controller

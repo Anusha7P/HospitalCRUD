@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\V1\Schedule;
 use Illuminate\Http\Request;
+use App\Models\Api\V1\Schedule;
+use App\Http\Controllers\Controller;
+
 
 class ScheduleController extends Controller
 {

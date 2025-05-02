@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Api\V1\Hospital;
-use Illuminate\Http\Request;
-use App\Http\Requests\HospitalRequest;
 use OpenApi\Annotations as OA;
+use App\Models\Api\V1\Hospital;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\HospitalRequest;
+
 
 /**
  * @OA\Info(

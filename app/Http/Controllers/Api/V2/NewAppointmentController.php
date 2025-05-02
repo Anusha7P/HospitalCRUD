@@ -2,12 +2,23 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\NewappointmentRequest;
-use App\Models\Api\V2\Appointment;
 use App\Models\Api\V2\Slot;
 use Illuminate\Http\Request;
+use App\Models\Api\V2\Appointment;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\NewappointmentRequest;
+
+/**
+ * @OA\Info(
+ *     title="Hospital Management API",
+ *     version="1.0.0",
+ *     description="API documentation for Hospital, Doctor, Patient, and Appointment management system",
+ *     @OA\Contact(
+ *         email="support@example.com"
+ *     )
+ * )
+ */
 
 class NewAppointmentController extends Controller
 {
